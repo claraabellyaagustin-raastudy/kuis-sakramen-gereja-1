@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KUIS SAKRAMEN DAN KERASULAN AWAM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                    },
+                    colors: {
+                        pastel: {
+                            bg: '#FFF2B2',
+                            light: '#FFF9DC',
+                            butter: '#FFE680',
+                            bright: '#FFD54F',
+                            gold: '#F4BD45',
+                            cream: '#FFFDF5',
+                            text: '#5B4930',
+                            error: '#E57373',
+                            success: '#81C784'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 3s infinite',
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                        'scale-in': 'scaleIn 0.3s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        scaleIn: {
+                            '0%': { transform: 'scale(0.9)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #FFF9DC 0%, #FFF2B2 100%);
+            color: #5B4930;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        /* Custom scrollbar for aesthetic */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FFF9DC;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FFD54F;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #F4BD45;
+        }
+        .glass-card {
+            background: rgba(255, 253, 245, 0.9);
+            backdrop-filter: blur(10px);
+            border: 2px solid #FFF9DC;
+            box-shadow: 0 10px 25px rgba(91, 73, 48, 0.05);
+        }
+        .option-card {
+            transition: all 0.2s ease;
+        }
+        .option-card:hover:not(.disabled) {
+            transform: translateY(-2px);
+            border-color: #FFD54F;
+            box-shadow: 0 4px 12px rgba(255, 213, 79, 0.2);
+        }
+        .option-card.selected {
+            background-color: #FFE680;
+            border-color: #F4BD45;
+            box-shadow: 0 4px 12px rgba(244, 189, 69, 0.3);
+            font-weight: 700;
+        }
+        .timer-warning {
+            color: #D84315;
+            animation: pulse-fast 1s infinite;
+        }
+    </style>
+</head>
+<body class="relative font-sans text-pastel-text antialiased selection:bg-pastel-bright selection:text-white">
+
+    <!-- Decorative Background Elements -->
+    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <svg class="absolute top-10 left-10 w-16 h-16 text-pastel-butter opacity-50 animate-float" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z"/></svg>
+        <svg class="absolute bottom-20 right-10 w-20 h-20 text-pastel-butter opacity-40 animate-float-delayed" fill="currentColor" viewBox="0 0 24 24"><path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z"/></svg>
+        <svg class="absolute top-1/3 right-1/4 w-10 h-10 text-pastel-gold opacity-30 animate-float" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd"/></svg>
+    </div>
+
+    <!-- Main Container -->
+    <main class="relative z-10 min-h-screen flex items-center justify-center p-4">
+        
+        <!-- PAGE 1: HOME -->
+        <section id="page-home" class="w-full max-w-2xl mx-auto text-center animate-fade-in">
+            <div class="glass-card rounded-3xl p-8 md:p-12">
+                <h1 class="text-3xl md:text-4xl font-extrabold text-pastel-text mb-2 leading-tight">
+                    KUIS SAKRAMEN <br> <span class="text-pastel-gold">DAN KERASULAN AWAM</span>
+                </h1>
+                <h2 class="text-lg md:text-xl font-semibold mb-4 text-pastel-gold">Uji Pemahamanmu tentang Sakramen dan Kerasulan Awam</h2>
+                <p class="text-sm md:text-base mb-6 text-gray-700 leading-relaxed">
+                    Yuk, uji pemahamanmu tentang sakramen dan kerasulan awam dalam Gereja Katolik! Jawab 10 pertanyaan menarik, selesaikan setiap soal sebelum waktu habis, dan raih nilai terbaikmu.
+                </p>
+                
+                <div class="inline-block bg-pastel-light border border-pastel-butter rounded-full px-6 py-2 mb-8 shadow-sm">
+                    <p class="text-xs font-bold tracking-wider text-pastel-gold">app kuis by clara abellya agustin</p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 text-left">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-pastel-light flex flex-col items-center justify-center text-center">
+                        <span class="text-2xl font-bold text-pastel-bright">10</span>
+                        <span class="text-xs font-semibold text-gray-600 uppercase">Jumlah Soal</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-pastel-light flex flex-col items-center justify-center text-center">
+                        <span class="text-2xl font-bold text-pastel-bright">15s</span>
+                        <span class="text-xs font-semibold text-gray-600 uppercase">Per Soal</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-pastel-light flex flex-col items-center justify-center text-center">
+                        <span class="text-2xl font-bold text-pastel-bright">100</span>
+                        <span class="text-xs font-semibold text-gray-600 uppercase">Nilai Maks</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-pastel-light flex flex-col items-center justify-center text-center">
+                        <span class="text-2xl font-bold text-pastel-bright text-xl">Otomatis</span>
+                        <span class="text-xs font-semibold text-gray-600 uppercase">Penilaian</span>
+                    </div>
+                </div>
+
+                <button onclick="navTo('identity')" class="w-full md:w-auto px-10 py-4 bg-pastel-bright hover:bg-pastel-gold text-pastel-text font-bold text-lg rounded-2xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+                    MULAI KUIS
+                </button>
+                
+                <!-- Helper for testing without DB -->
+                <div id="db-status-home" class="mt-4 text-xs text-gray-500"></div>
+            </div>
+        </section>
+
+        <!-- PAGE 2: IDENTITY INPUT -->
+        <section id="page-identity" class="w-full max-w-md mx-auto hidden animate-fade-in">
+            <div class="glass-card rounded-3xl p-8 text-center">
+                <div class="w-16 h-16 bg-pastel-light rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-pastel-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                </div>
+                <h2 class="text-2xl font-bold mb-2">IDENTITAS PESERTA</h2>
+                <p class="text-sm text-gray-600 mb-6">Masukkan namamu terlebih dahulu sebelum memulai kuis.</p>
+                
+                <div class="mb-6 text-left">
+                    <label for="playerName" class="block text-sm font-semibold mb-2 ml-1">Nama Lengkap</label>
+                    <input type="text" id="playerName" placeholder="Ketik nama lengkapmu di sini..." 
+                        class="w-full px-4 py-3 rounded-xl border-2 border-pastel-light focus:border-pastel-gold focus:ring-4 focus:ring-pastel-butter focus:ring-opacity-50 outline-none transition-all bg-white text-pastel-text font-medium"
+                        autocomplete="off">
+                    <p id="name-error" class="text-red-500 text-xs mt-2 ml-1 hidden">Silakan masukkan nama terlebih dahulu.</p>
+                </div>
+
+                <div class="flex flex-col gap-3">
+                    <button onclick="startQuiz()" class="w-full py-3 bg-pastel-bright hover:bg-pastel-gold text-pastel-text font-bold rounded-xl shadow-md transition-all">
+                        MULAI MENGERJAKAN KUIS
+                    </button>
+                    <button onclick="navTo('home')" class="w-full py-3 bg-pastel-cream hover:bg-pastel-light text-pastel-text font-bold border-2 border-pastel-light rounded-xl transition-all">
+                        KEMBALI KE BERANDA
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 3: QUIZ -->
+        <section id="page-quiz" class="w-full max-w-3xl mx-auto hidden animate-fade-in">
+            <div class="glass-card rounded-3xl p-6 md:p-8">
+                <!-- Header -->
+                <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                    <div class="bg-white px-4 py-2 rounded-full shadow-sm border border-pastel-light w-full md:w-auto text-center">
+                        <span id="quiz-greeting" class="font-bold text-sm">Semangat mengerjakan, [Nama]!</span>
+                    </div>
+                    <div class="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
+                        <div class="text-right">
+                            <span id="quiz-progress-text" class="text-xs font-bold text-gray-500 uppercase block">SOAL 1 DARI 10</span>
+                            <span id="quiz-progress-pct" class="text-sm font-bold text-pastel-gold">Progress: 10%</span>
+                        </div>
+                        <div class="bg-white border-2 border-pastel-light rounded-2xl px-4 py-2 flex items-center shadow-sm min-w-[140px] justify-center">
+                            <svg class="w-5 h-5 mr-2 text-pastel-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span id="quiz-timer" class="font-extrabold text-lg">15 DETIK</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full bg-pastel-light rounded-full h-3 mb-8 overflow-hidden">
+                    <div id="quiz-progress-bar" class="bg-pastel-bright h-3 rounded-full transition-all duration-300" style="width: 10%"></div>
+                </div>
+
+                <!-- Question Area -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-pastel-light mb-6">
+                    <h3 id="question-text" class="text-lg md:text-xl font-bold leading-relaxed mb-0">Pertanyaan di sini...</h3>
+                </div>
+
+                <!-- Options -->
+                <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <!-- Populated via JS -->
+                </div>
+
+                <!-- Footer Action -->
+                <div class="flex justify-between items-center border-t border-pastel-light pt-6">
+                    <p id="quiz-message" class="text-sm text-pastel-error font-semibold opacity-0 transition-opacity">Silakan pilih salah satu jawaban terlebih dahulu.</p>
+                    <button id="btn-next" onclick="handleNextClick()" class="px-8 py-3 bg-pastel-bright hover:bg-pastel-gold text-pastel-text font-bold rounded-xl shadow-md transition-all flex items-center">
+                        <span id="btn-next-text">LANJUT</span>
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: RESULT -->
+        <section id="page-result" class="w-full max-w-2xl mx-auto hidden">
+            <div class="glass-card rounded-3xl p-8 md:p-12 text-center relative overflow-hidden">
+                <!-- Confetti decors -->
+                <div class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-50 flex justify-around">
+                    <div class="w-2 h-10 bg-pastel-bright animate-float" style="animation-delay: 0.1s"></div>
+                    <div class="w-3 h-8 bg-pastel-gold animate-float" style="animation-delay: 0.5s"></div>
+                    <div class="w-2 h-12 bg-pastel-butter animate-float" style="animation-delay: 0.3s"></div>
+                    <div class="w-4 h-6 bg-white animate-float" style="animation-delay: 0.7s"></div>
+                </div>
+
+                <h2 class="text-3xl font-black mb-2 relative z-10 text-pastel-gold drop-shadow-sm">KUIS SELESAI!</h2>
+                <div class="inline-block bg-white border border-pastel-light rounded-full px-6 py-2 mb-8 shadow-sm relative z-10">
+                    <p id="result-name" class="text-sm font-bold uppercase tracking-wider">HASIL KUIS: [NAMA]</p>
+                </div>
+
+                <div class="relative z-10 flex justify-center items-center mb-6">
+                    <div class="w-48 h-48 bg-white rounded-full flex flex-col items-center justify-center border-8 border-pastel-butter shadow-xl animate-scale-in">
+                        <span id="result-score" class="text-6xl font-black text-pastel-text leading-none">0</span>
+                        <span class="text-xl font-bold text-gray-400 mt-1">/ 100</span>
+                    </div>
+                </div>
+
+                <p id="result-feedback" class="text-lg font-semibold mb-8 relative z-10 px-4">Pesan feedback di sini</p>
+
+                <div class="grid grid-cols-3 gap-4 mb-8 bg-white p-4 rounded-2xl shadow-sm border border-pastel-light relative z-10">
+                    <div>
+                        <span class="block text-xs font-bold text-gray-500 uppercase">Benar</span>
+                        <span id="result-correct" class="text-xl font-black text-pastel-success">0</span>
+                    </div>
+                    <div class="border-l border-r border-pastel-light">
+                        <span class="block text-xs font-bold text-gray-500 uppercase">Salah/Kosong</span>
+                        <span id="result-wrong" class="text-xl font-black text-pastel-error">0</span>
+                    </div>
+                    <div>
+                        <span class="block text-xs font-bold text-gray-500 uppercase">Persentase</span>
+                        <span id="result-pct" class="text-xl font-black text-pastel-gold">0%</span>
+                    </div>
+                </div>
+                
+                <p id="result-saving-status" class="text-sm font-semibold text-pastel-gold mb-6 relative z-10 animate-pulse">Menyimpan hasil...</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 relative z-10">
+                    <button onclick="viewDiscussion()" class="py-3 bg-white hover:bg-pastel-light text-pastel-text font-bold border-2 border-pastel-bright rounded-xl transition-all shadow-sm">
+                        LIHAT PEMBAHASAN
+                    </button>
+                    <button onclick="viewLeaderboard()" class="py-3 bg-pastel-bright hover:bg-pastel-gold text-pastel-text font-bold rounded-xl transition-all shadow-md">
+                        LIHAT REKAP SEMUA PESERTA
+                    </button>
+                    <button onclick="restartQuiz()" class="py-3 bg-white hover:bg-pastel-light text-pastel-text font-bold border-2 border-pastel-light rounded-xl transition-all">
+                        ULANGI KUIS
+                    </button>
+                    <button onclick="navTo('home')" class="py-3 bg-pastel-cream hover:bg-pastel-light text-pastel-text font-bold border-2 border-pastel-light rounded-xl transition-all">
+                        KEMBALI KE BERANDA
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 5: DISCUSSION -->
+        <section id="page-discussion" class="w-full max-w-4xl mx-auto hidden animate-fade-in pb-10">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-2xl font-black text-pastel-text">PEMBAHASAN KUIS</h2>
+                    <p class="text-sm font-semibold text-pastel-gold">Review jawabanmu</p>
+                </div>
+                <button onclick="navTo('result')" class="bg-white p-2 rounded-xl border border-pastel-light hover:bg-pastel-light transition-all">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                </button>
+            </div>
+            
+            <div id="discussion-container" class="space-y-4">
+                <!-- Populated via JS -->
+            </div>
+
+            <div class="mt-8 flex justify-center gap-4">
+                <button onclick="restartQuiz()" class="px-6 py-3 bg-pastel-bright hover:bg-pastel-gold text-pastel-text font-bold rounded-xl shadow-md transition-all">
+                    ULANGI KUIS
+                </button>
+                <button onclick="navTo('home')" class="px-6 py-3 bg-white hover:bg-pastel-light text-pastel-text font-bold border-2 border-pastel-light rounded-xl transition-all">
+                    KEMBALI KE BERANDA
+                </button>
+            </div>
+        </section>
+
+        <!-- PAGE 6: RECAP / LEADERBOARD -->
+        <section id="page-recap" class="w-full max-w-5xl mx-auto hidden animate-fade-in pb-10">
+            <div class="glass-card rounded-3xl p-6 md:p-8">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-black text-pastel-text">REKAP HASIL KUIS PESERTA</h2>
+                        <p class="text-sm md:text-base font-semibold text-pastel-gold">Daftar peserta dan hasil Kuis Sakramen dan Kerasulan Awam.</p>
+                    </div>
+                    <div class="flex gap-2 w-full md:w-auto">
+                        <button onclick="navTo('result')" class="flex-1 md:flex-none px-4 py-2 bg-white hover:bg-pastel-light text-pastel-text font-bold border-2 border-pastel-light rounded-xl transition-all text-center">
+                            KEMBALI
+                        </button>
+                        <button onclick="fetchLeaderboard()" class="px-4 py-2 bg-pastel-bright hover:bg-pastel-gold text-pastel-text font-bold rounded-xl shadow-md transition-all flex items-center justify-center" title="Refresh">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Summary -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-pastel-light text-center">
+                        <span class="block text-xs font-bold text-gray-500 uppercase mb-1">Total Percobaan</span>
+                        <span id="stat-total" class="text-2xl font-black text-pastel-text">-</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-pastel-light text-center">
+                        <span class="block text-xs font-bold text-gray-500 uppercase mb-1">Rata-rata Nilai</span>
+                        <span id="stat-avg" class="text-2xl font-black text-pastel-gold">-</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-pastel-light text-center">
+                        <span class="block text-xs font-bold text-gray-500 uppercase mb-1">Nilai Tertinggi</span>
+                        <span id="stat-high" class="text-2xl font-black text-pastel-success">-</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-pastel-light text-center">
+                        <span class="block text-xs font-bold text-gray-500 uppercase mb-1">Nilai Terendah</span>
+                        <span id="stat-low" class="text-2xl font-black text-pastel-error">-</span>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="flex flex-col md:flex-row gap-4 mb-6">
+                    <div class="flex-1 relative">
+                        <input type="text" id="search-input" placeholder="Cari nama peserta..." oninput="handleSearch()"
+                            class="w-full pl-10 pr-4 py-2 rounded-xl border-2 border-pastel-light focus:border-pastel-gold focus:ring-2 focus:ring-pastel-butter outline-none bg-white text-sm font-medium">
+                        <svg class="w-5 h-5 absolute left-3 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <div class="flex gap-2">
+                        <select id="sort-select" onchange="handleSort()" class="px-4 py-2 rounded-xl border-2 border-pastel-light bg-white text-sm font-bold text-pastel-text outline-none focus:border-pastel-gold">
+                            <option value="terbaru">Terbaru</option>
+                            <option value="tertinggi">Nilai Tertinggi</option>
+                            <option value="terendah">Nilai Terendah</option>
+                            <option value="nama_az">Nama (A-Z)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Table Container -->
+                <div class="bg-white rounded-2xl border border-pastel-light overflow-hidden shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-pastel-light text-xs uppercase tracking-wider text-gray-600 border-b border-pastel-butter">
+                                    <th class="p-4 font-bold">No.</th>
+                                    <th class="p-4 font-bold">Nama Peserta</th>
+                                    <th class="p-4 font-bold hidden md:table-cell text-center">Benar</th>
+                                    <th class="p-4 font-bold hidden md:table-cell text-center">Salah</th>
+                                    <th class="p-4 font-bold text-center">Nilai</th>
+                                    <th class="p-4 font-bold hidden md:table-cell">Waktu Penyelesaian</th>
+                                    <th class="p-4 font-bold text-center">Detail</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recap-table-body" class="divide-y divide-pastel-light text-sm font-medium">
+                                <!-- Populated via JS -->
+                                <tr><td colspan="7" class="p-8 text-center text-gray-500">Memuat data...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div id="db-error-msg" class="hidden mt-4 p-4 bg-red-50 border border-red-200 rounded-xl text-center text-sm text-red-600">
+                    Gagal mengambil data dari database. Pastikan koneksi internet stabil atau database telah dikonfigurasi.
+                    <button onclick="fetchLeaderboard()" class="ml-2 font-bold underline">Coba Lagi</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 7: DETAIL -->
+        <section id="page-detail" class="w-full max-w-4xl mx-auto hidden animate-fade-in pb-10">
+            <div class="glass-card rounded-3xl p-6 md:p-8">
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h2 class="text-2xl font-black text-pastel-text">DETAIL HASIL PESERTA</h2>
+                        <p id="detail-id" class="text-xs font-mono text-gray-400 mt-1">ID: -</p>
+                    </div>
+                    <button onclick="navTo('recap')" class="px-4 py-2 bg-pastel-cream hover:bg-pastel-light text-pastel-text font-bold border-2 border-pastel-light rounded-xl transition-all">
+                        KEMBALI KE REKAP
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="md:col-span-2 bg-white p-6 rounded-2xl border border-pastel-light shadow-sm">
+                        <p class="text-sm text-gray-500 font-bold uppercase mb-1">Nama Peserta</p>
+                        <p id="detail-name" class="text-2xl font-black text-pastel-text">Nama</p>
+                        <p id="detail-time" class="text-sm text-gray-500 mt-2">Waktu</p>
+                    </div>
+                    <div class="bg-pastel-light p-6 rounded-2xl border border-pastel-butter text-center flex flex-col justify-center shadow-sm">
+                        <span class="text-sm font-bold text-gray-600 uppercase mb-1">Nilai Akhir</span>
+                        <div class="flex items-baseline justify-center gap-1">
+                            <span id="detail-score" class="text-5xl font-black text-pastel-gold">0</span>
+                            <span class="text-lg font-bold text-gray-500">/ 100</span>
+                        </div>
+                        <div class="mt-2 text-sm font-bold">
+                            <span class="text-pastel-success mr-2" id="detail-correct">B: 0</span>
+                            <span class="text-pastel-error" id="detail-wrong">S: 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="font-bold text-lg mb-4 border-b border-pastel-light pb-2">Rincian Jawaban</h3>
+                <div id="detail-answers-container" class="space-y-4">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modals -->
+    <!-- Custom Alert Modal -->
+    <div id="modal-alert" class="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center hidden opacity-0 transition-opacity">
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full mx-4 shadow-2xl transform scale-95 transition-transform" id="modal-alert-content">
+            <h3 class="text-xl font-bold text-pastel-text mb-4" id="modal-alert-title">Perhatian</h3>
+            <p class="text-gray-600 mb-8" id="modal-alert-msg">Pesan</p>
+            <div class="flex justify-end">
+                <button onclick="closeModal('alert')" class="px-6 py-2 bg-pastel-bright hover:bg-pastel-gold text-pastel-text font-bold rounded-xl transition-all">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Finish Modal -->
+    <div id="modal-confirm" class="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center hidden opacity-0 transition-opacity">
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full mx-4 shadow-2xl transform scale-95 transition-transform" id="modal-confirm-content">
+            <div class="w-16 h-16 bg-pastel-light rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-pastel-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-center text-pastel-text mb-2">Konfirmasi</h3>
+            <p class="text-gray-600 text-center mb-8">Apakah kamu yakin ingin menyelesaikan kuis?</p>
+            <div class="flex flex-col gap-3">
+                <button onclick="executeFinishQuiz()" class="w-full py-3 bg-pastel-bright hover:bg-pastel-gold text-pastel-text font-bold rounded-xl transition-all shadow-md">YA, SELESAIKAN</button>
+                <button onclick="closeModal('confirm')" class="w-full py-3 bg-white hover:bg-pastel-light text-gray-600 font-bold border-2 border-gray-200 rounded-xl transition-all">KEMBALI</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Logic -->
+    <script type="module">
+        // ==========================================
+        // 1. FIREBASE CONFIGURATION & INIT
+        // ==========================================
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-quiz-app';
+        let db = null;
+        let auth = null;
+        let firebaseReady = false;
+        let userId = null;
+
+        // Strict paths as required
+        const getPublicCollectionPath = () => collection(db, 'artifacts', appId, 'public', 'data', 'quiz_results');
+
+        async function initFirebase() {
+            const statusEl = document.getElementById('db-status-home');
+            if (typeof __firebase_config !== 'undefined') {
+                try {
+                    const firebaseConfig = JSON.parse(__firebase_config);
+                    const app = initializeApp(firebaseConfig);
+                    db = getFirestore(app);
+                    auth = getAuth(app);
+
+                    // Auth Rule 3: ALWAYS call auth first and await it
+                    if (typeof __initial_auth_token !== 'undefined') {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                    
+                    userId = auth.currentUser?.uid;
+                    if(userId) {
+                        firebaseReady = true;
+                        if(statusEl) statusEl.innerHTML = '<span class="text-pastel-success">●</span> Database online terhubung.';
+                    }
+                } catch (e) {
+                    console.error("Firebase init failed", e);
+                    if(statusEl) statusEl.innerHTML = '<span class="text-pastel-error">●</span> Gagal terhubung ke database. Berjalan dalam mode lokal.';
+                }
+            } else {
+                console.warn("Firebase config missing. Running in local mode.");
+                if(statusEl) statusEl.innerHTML = '<span class="text-pastel-error">●</span> Konfigurasi database tidak ditemukan. Fitur rekap dibatasi.';
+            }
+        }
+
+        // ==========================================
+        // 2. QUIZ DATA (STRICTLY AS PROVIDED)
+        // ==========================================
+        const quizData = [
+            {
+                id: 1,
+                question: "Berdasarkan ajaran Gereja, sakramen dipahami sebagai...",
+                options: {
+                    A: "Upacara adat istiadat yang sudah dijalankan sejak zaman Perjanjian Lama",
+                    B: "Tanda yang terlihat, yang dilembagakan oleh Yesus dan dipercayakan kepada Gereja untuk menyalurkan rahmat Allah",
+                    C: "Aturan hukum Gereja yang wajib ditaati oleh semua umat Katolik",
+                    D: "Kebiasaan jemaat perdana yang diteruskan hingga masa kini"
+                },
+                answer: "B",
+                explanation: "Gereja Katolik mengajarkan bahwa sakramen adalah tanda kelihatan yang dilembagakan oleh Kristus dan dipercayakan kepada Gereja, yang melaluinya kehidupan ilahi (rahmat) disalurkan kepada kita."
+            },
+            {
+                id: 2,
+                question: "Sakramen-sakramen dalam Gereja Katolik secara umum dikelompokkan menjadi tiga bagian besar, yaitu...",
+                options: {
+                    A: "Sakramen Pelayanan, Sakramen Pengorbanan, dan Sakramen Ketaatan",
+                    B: "Sakramen Inisiasi, Sakramen Panggilan, dan Sakramen Penyembuhan",
+                    C: "Sakramen Anak-anak, Sakramen Remaja, dan Sakramen Dewasa",
+                    D: "Sakramen Keselamatan, Sakramen Hierarki, dan Sakramen Awam"
+                },
+                answer: "B",
+                explanation: "Tujuh sakramen dikelompokkan menjadi: Sakramen Inisiasi (Baptis, Krisma, Ekaristi), Sakramen Penyembuhan (Tobat, Pengurapan Orang Sakit), dan Sakramen Panggilan/Pelayanan (Imamat, Perkawinan)."
+            },
+            {
+                id: 3,
+                question: "Dalam syarat validitas sebuah sakramen, benda material yang dapat ditangkap oleh panca indra (seperti air untuk baptis, atau roti dan anggur untuk Ekaristi) disebut sebagai...",
+                options: {
+                    A: "Forma",
+                    B: "Halangan (Impediment)",
+                    C: "Materia",
+                    D: "Misteri"
+                },
+                answer: "C",
+                explanation: "Materia adalah unsur atau tindakan fisik yang kelihatan dalam sakramen (misal: air, minyak, roti, anggur, penumpangan tangan), sedangkan forma adalah kata-kata atau rumusan doa yang diucapkan."
+            },
+            {
+                id: 4,
+                question: "Berdasarkan dokumen Apostolicam Actuositatem (AA 2), kaum awam ikut serta dalam tugas perutusan Kristus dengan mengemban tiga tugas pokok, yaitu...",
+                options: {
+                    A: "Mengajar, menyucikan, dan memimpin",
+                    B: "Membangun gereja, mengumpulkan dana, dan mengelola paroki",
+                    C: "Tugas imamat, kenabian, dan rajawi",
+                    D: "Pelayanan meja, paduan suara, dan pembacaan Kitab Suci"
+                },
+                answer: "C",
+                explanation: "Melalui pembaptisan, kaum awam dipersatukan dengan Kristus dan ikut serta mengemban tugas imamat (menguduskan), kenabian (mewartakan), dan rajawi (memimpin/melayani) Kristus."
+            },
+            {
+                id: 5,
+                question: "Cinta kasih adalah jiwa dari seluruh aktivitas kerasulan dalam Gereja. Menurut ajaran Gereja (AA 3), sumber utama untuk menimba cinta kasih tersebut adalah dari...",
+                options: {
+                    A: "Sakramen Pengakuan Dosa",
+                    B: "Sakramen Perkawinan",
+                    C: "Ekaristi",
+                    D: "Sumbangan umat"
+                },
+                answer: "C",
+                explanation: "Ekaristi adalah sumber dan puncak kehidupan Kristiani. Dari Ekaristilah, kaum awam menimba cinta kasih yang merupakan jiwa dari segala kerasulan."
+            },
+            {
+                id: 6,
+                question: "Jika seorang diakon mencoba merayakan (memimpin) Ekaristi atau Misa, maka hal tersebut tidak valid karena...",
+                options: {
+                    A: "Forma kata-katanya kurang lengkap",
+                    B: "Diakon tersebut tidak menggunakan materia yang tepat",
+                    C: "Terdapat halangan bagi penerima sakramen",
+                    D: "Diakon tidak memiliki kuasa (wewenang) yang disyaratkan untuk bertindak selaku pelayan perayaan Ekaristi"
+                },
+                answer: "D",
+                explanation: "Hanya imam dan uskup (klerus yang telah menerima tahbisan presbiterat/episkopat) yang memiliki kuasa wewenang secara valid untuk memimpin perayaan Ekaristi (konsekrasi)."
+            },
+            {
+                id: 7,
+                question: "Siapakah pelayan biasa (ordinary minister) yang memiliki wewenang untuk menerimakan Sakramen Pembaptisan?",
+                options: {
+                    A: "Hanya Uskup",
+                    B: "Uskup, imam, atau diakon",
+                    C: "Seluruh umat awam yang sudah dibaptis",
+                    D: "Frater dan Suster"
+                },
+                answer: "B",
+                explanation: "Pelayan biasa untuk Sakramen Pembaptisan adalah uskup, imam, dan dalam Gereja Latin, juga diakon."
+            },
+            {
+                id: 8,
+                question: "Dalam keadaan darurat, siapakah yang diizinkan menjadi pelayan luar biasa untuk menerimakan Sakramen Pembaptisan?",
+                options: {
+                    A: "Hanya keluarga kandung dari orang yang akan dibaptis",
+                    B: "Umat awam yang didelegasikan oleh uskup atau siapapun (dalam keadaan darurat)",
+                    C: "Hanya Paus dan Vikaris Jenderal",
+                    D: "Tidak ada, baptisan harus ditunda sampai ada imam"
+                },
+                answer: "B",
+                explanation: "Dalam keadaan darurat (misal bahaya maut), siapapun, bahkan orang yang tidak dibaptis sekalipun, asalkan memiliki intensi untuk melakukan apa yang dilakukan Gereja, dapat membaptis secara valid dengan menggunakan rumusan Tritunggal dan air."
+            },
+            {
+                id: 9,
+                question: "Berbeda dengan sakramen lainnya, siapakah yang bertindak sebagai pelayan sakramen dalam Sakramen Perkawinan (menurut tradisi Gereja Barat)?",
+                options: {
+                    A: "Imam paroki setempat",
+                    B: "Uskup diosesan",
+                    C: "Suami dan istri itu sendiri",
+                    D: "Orang tua dari kedua mempelai"
+                },
+                answer: "C",
+                explanation: "Dalam Gereja Latin, para mempelai (suami dan istri) adalah pelayan sakramen perkawinan itu sendiri dengan saling menerimakan sakramen tersebut melalui kesepakatan mereka. Klerus (imam/diakon) hadir sebagai saksi resmi Gereja."
+            },
+            {
+                id: 10,
+                question: "Dalam struktur pelayan sakramen, pembagian Komuni Suci memiliki pelayan biasa dan luar biasa. Jika klerus tidak mencukupi, siapakah yang dapat menjadi pelayan luar biasa Komuni Suci?",
+                options: {
+                    A: "Hanya Uskup",
+                    B: "Akolit yang diberi wewenang atau umat awam",
+                    C: "Anak-anak Bina Iman",
+                    D: "Siapapun yang secara sukarela maju ke altar"
+                },
+                answer: "B",
+                explanation: "Pelayan biasa Komuni adalah uskup, imam, dan diakon. Pelayan luar biasa adalah akolit terlantik atau kaum awam lain yang diberi wewenang khusus oleh otoritas Gereja untuk keperluan tersebut (Prodiakon)."
+            }
+        ];
+
+        // ==========================================
+        // 3. STATE VARIABLES
+        // ==========================================
+        let state = {
+            playerName: "",
+            currentIndex: 0,
+            answers: [], // Array of {qId, selectedOption, isCorrect}
+            timeLeft: 15,
+            timerId: null,
+            sessionId: null, // Unique ID per attempt to prevent double saving
+            isSaved: false,
+            leaderboardData: []
+        };
+
+        const PAGES = ['home', 'identity', 'quiz', 'result', 'discussion', 'recap', 'detail'];
+
+        // ==========================================
+        // 4. NAVIGATION & UTILS
+        // ==========================================
+        window.navTo = function(pageId) {
+            PAGES.forEach(p => {
+                document.getElementById(`page-${p}`).classList.add('hidden');
+            });
+            const target = document.getElementById(`page-${pageId}`);
+            if (target) {
+                target.classList.remove('hidden');
+                // Re-trigger animation
+                target.classList.remove('animate-fade-in');
+                void target.offsetWidth; // trigger reflow
+                target.classList.add('animate-fade-in');
+            }
+            window.scrollTo(0,0);
+        };
+
+        window.showAlert = function(title, msg) {
+            document.getElementById('modal-alert-title').innerText = title;
+            document.getElementById('modal-alert-msg').innerText = msg;
+            const modal = document.getElementById('modal-alert');
+            const content = document.getElementById('modal-alert-content');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+            }, 10);
+        };
+
+        window.closeModal = function(type) {
+            const modal = document.getElementById(`modal-${type}`);
+            const content = document.getElementById(`modal-${type}-content`);
+            modal.classList.add('opacity-0');
+            content.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        };
+
+        function generateSessionId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        // ==========================================
+        // 5. QUIZ LOGIC
+        // ==========================================
+        window.startQuiz = function() {
+            const nameInput = document.getElementById('playerName');
+            const errorMsg = document.getElementById('name-error');
+            const name = nameInput.value.trim();
+
+            if (!name) {
+                errorMsg.classList.remove('hidden');
+                nameInput.classList.add('border-pastel-error');
+                return;
+            }
+
+            errorMsg.classList.add('hidden');
+            nameInput.classList.remove('border-pastel-error');
+            
+            // Initialize State for new quiz
+            state.playerName = name;
+            state.currentIndex = 0;
+            state.answers = Array(quizData.length).fill(null);
+            state.sessionId = generateSessionId();
+            state.isSaved = false;
+
+            document.getElementById('quiz-greeting').innerText = `Semangat mengerjakan, ${name}!`;
+            
+            navTo('quiz');
+            loadQuestion();
+        };
+
+        function loadQuestion() {
+            clearInterval(state.timerId);
+            const qIndex = state.currentIndex;
+            const qData = quizData[qIndex];
+            
+            // Update Header
+            document.getElementById('quiz-progress-text').innerText = `SOAL ${qIndex + 1} DARI ${quizData.length}`;
+            const pct = Math.round(((qIndex) / quizData.length) * 100);
+            document.getElementById('quiz-progress-pct').innerText = `Progress: ${pct}%`;
+            document.getElementById('quiz-progress-bar').style.width = `${pct}%`;
+            
+            // Button state
+            const btnNext = document.getElementById('btn-next');
+            const btnText = document.getElementById('btn-next-text');
+            btnText.innerText = (qIndex === quizData.length - 1) ? 'SELESAI' : 'LANJUT';
+            document.getElementById('quiz-message').style.opacity = "0";
+
+            // Load Content
+            document.getElementById('question-text').innerText = qData.question;
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            Object.keys(qData.options).forEach(key => {
+                const optDiv = document.createElement('div');
+                optDiv.className = `option-card bg-white p-4 rounded-xl border-2 border-pastel-light cursor-pointer flex items-start shadow-sm`;
+                optDiv.onclick = () => selectAnswer(key);
+                optDiv.id = `opt-${key}`;
+                optDiv.innerHTML = `
+                    <div class="w-8 h-8 rounded-full bg-pastel-light flex items-center justify-center font-bold text-pastel-gold mr-3 shrink-0">${key}</div>
+                    <div class="flex-1 text-sm md:text-base font-medium mt-1">${qData.options[key]}</div>
+                `;
+                optionsContainer.appendChild(optDiv);
+            });
+
+            // Start Timer
+            state.timeLeft = 15;
+            updateTimerDisplay();
+            state.timerId = setInterval(() => {
+                state.timeLeft--;
+                updateTimerDisplay();
+                if (state.timeLeft <= 0) {
+                    handleTimeout();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const timerEl = document.getElementById('quiz-timer');
+            timerEl.innerText = `${state.timeLeft} DETIK`;
+            if (state.timeLeft <= 5 && state.timeLeft > 0) {
+                timerEl.classList.add('timer-warning');
+            } else {
+                timerEl.classList.remove('timer-warning');
+            }
+        }
+
+        window.selectAnswer = function(key) {
+            if (state.timeLeft <= 0) return; // Prevent selection if time is up somehow
+            
+            // Remove selection from all
+            ['A', 'B', 'C', 'D'].forEach(k => {
+                const el = document.getElementById(`opt-${k}`);
+                if(el) {
+                    el.classList.remove('selected');
+                    el.querySelector('div:first-child').classList.remove('bg-pastel-gold', 'text-white');
+                    el.querySelector('div:first-child').classList.add('bg-pastel-light', 'text-pastel-gold');
+                }
+            });
+
+            // Add selection to target
+            const targetEl = document.getElementById(`opt-${key}`);
+            targetEl.classList.add('selected');
+            targetEl.querySelector('div:first-child').classList.remove('bg-pastel-light', 'text-pastel-gold');
+            targetEl.querySelector('div:first-child').classList.add('bg-pastel-gold', 'text-white');
+
+            // Save to state temporarily
+            const qData = quizData[state.currentIndex];
+            state.answers[state.currentIndex] = {
+                qId: qData.id,
+                selectedOption: key,
+                isCorrect: key === qData.answer
+            };
+            
+            document.getElementById('quiz-message').style.opacity = "0";
+        };
+
+        window.handleNextClick = function() {
+            if (state.timeLeft <= 0) return; // Ignore clicks while processing timeout
+
+            if (!state.answers[state.currentIndex]) {
+                document.getElementById('quiz-message').style.opacity = "1";
+                return;
+            }
+
+            clearInterval(state.timerId);
+            
+            if (state.currentIndex === quizData.length - 1) {
+                showConfirmFinish();
+            } else {
+                state.currentIndex++;
+                loadQuestion();
+            }
+        };
+
+        function handleTimeout() {
+            clearInterval(state.timerId);
+            document.getElementById('quiz-timer').innerText = "HABIS!";
+            
+            // Lock options
+            ['A', 'B', 'C', 'D'].forEach(k => {
+                const el = document.getElementById(`opt-${k}`);
+                if(el) el.classList.add('disabled', 'opacity-50', 'pointer-events-none');
+            });
+
+            // Mark as wrong (null) if no answer was selected
+            if (!state.answers[state.currentIndex]) {
+                state.answers[state.currentIndex] = {
+                    qId: quizData[state.currentIndex].id,
+                    selectedOption: null,
+                    isCorrect: false
+                };
+            }
+
+            // Brief pause then move
+            setTimeout(() => {
+                if (state.currentIndex === quizData.length - 1) {
+                    executeFinishQuiz(); // Auto finish if last question timeouts
+                } else {
+                    state.currentIndex++;
+                    loadQuestion();
+                }
+            }, 1000);
+        }
+
+        window.showConfirmFinish = function() {
+            const modal = document.getElementById('modal-confirm');
+            const content = document.getElementById('modal-confirm-content');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+            }, 10);
+        };
+
+        window.executeFinishQuiz = function() {
+            closeModal('confirm');
+            clearInterval(state.timerId);
+            calculateResults();
+        };
+
+        // ==========================================
+        // 6. RESULTS & DATABASE SAVING
+        // ==========================================
+        async function calculateResults() {
+            let correct = 0;
+            let wrong = 0;
+            
+            state.answers.forEach(ans => {
+                if (ans && ans.isCorrect) correct++;
+                else wrong++;
+            });
+
+            const score = correct * 10;
+            const pct = Math.round((correct / quizData.length) * 100);
+
+            // Populate Result UI
+            document.getElementById('result-name').innerText = `HASIL KUIS: ${state.playerName}`;
+            
+            // Score animation
+            const scoreEl = document.getElementById('result-score');
+            scoreEl.innerText = '0';
+            navTo('result');
+            
+            let currentScore = 0;
+            const animInterval = setInterval(() => {
+                if (currentScore >= score) {
+                    clearInterval(animInterval);
+                    scoreEl.innerText = score;
+                } else {
+                    currentScore += 2; // Speed up
+                    if (currentScore > score) currentScore = score;
+                    scoreEl.innerText = currentScore;
+                }
+            }, 20);
+
+            document.getElementById('result-correct').innerText = correct;
+            document.getElementById('result-wrong').innerText = wrong;
+            document.getElementById('result-pct').innerText = `${pct}%`;
+
+            let feedback = "";
+            if (score >= 90) feedback = "Luar biasa! Pemahamanmu tentang materi Sakramen dan Kerasulan Awam sangat baik.";
+            else if (score >= 80) feedback = "Bagus! Kamu sudah memahami sebagian besar materi Sakramen dan Kerasulan Awam.";
+            else if (score >= 70) feedback = "Cukup baik! Pelajari kembali beberapa bagian materi agar pemahamanmu semakin kuat.";
+            else feedback = "Jangan menyerah! Pelajari kembali materi dan pembahasan, kemudian coba ulangi kuis.";
+            document.getElementById('result-feedback').innerText = feedback;
+
+            // Prepare data to save
+            const resultData = {
+                sessionId: state.sessionId,
+                playerName: state.playerName,
+                correctCount: correct,
+                wrongCount: wrong,
+                score: score,
+                percentage: pct,
+                timestamp: new Date().toISOString(),
+                answers: state.answers
+            };
+
+            await saveToDatabase(resultData);
+            generateDiscussion();
+        }
+
+        async function saveToDatabase(data) {
+            if (state.isSaved) return; // Prevent double save
+            
+            const statusEl = document.getElementById('result-saving-status');
+            statusEl.innerText = "Menyimpan hasil...";
+            statusEl.classList.remove('hidden');
+
+            if (!firebaseReady || !userId) {
+                statusEl.innerText = "Disimpan secara lokal (Database tidak aktif).";
+                statusEl.classList.remove('animate-pulse');
+                state.isSaved = true;
+                return;
+            }
+
+            try {
+                // RULE 1: STRICT PATH
+                const colRef = getPublicCollectionPath();
+                await addDoc(colRef, {
+                    ...data,
+                    userId: userId, // associate with anonymous user
+                    createdAt: Date.now() // For easy sorting later
+                });
+                state.isSaved = true;
+                statusEl.innerText = "Hasil berhasil disimpan ke database!";
+                statusEl.classList.remove('animate-pulse', 'text-pastel-gold');
+                statusEl.classList.add('text-pastel-success');
+            } catch (error) {
+                console.error("Error saving result: ", error);
+                statusEl.innerText = "Gagal menyimpan ke database. Hasil hanya tersimpan lokal.";
+                statusEl.classList.remove('animate-pulse', 'text-pastel-gold');
+                statusEl.classList.add('text-pastel-error');
+            }
+        }
+
+        window.restartQuiz = function() {
+            // Reset to identity page but keep name in input
+            navTo('identity');
+            // The state will be re-initialized when startQuiz is called
+        };
+
+        // ==========================================
+        // 7. DISCUSSION / REVIEW
+        // ==========================================
+        function generateDiscussion() {
+            const container = document.getElementById('discussion-container');
+            container.innerHTML = '';
+
+            quizData.forEach((q, index) => {
+                const userAns = state.answers[index];
+                const isCorrect = userAns && userAns.isCorrect;
+                const isSkipped = !userAns || !userAns.selectedOption;
+                
+                let statusHtml = '';
+                let borderClass = '';
+                if (isCorrect) {
+                    statusHtml = `<span class="bg-pastel-success text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> BENAR</span>`;
+                    borderClass = 'border-pastel-success';
+                } else if (isSkipped) {
+                    statusHtml = `<span class="bg-gray-400 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">TIDAK DIJAWAB</span>`;
+                    borderClass = 'border-gray-300';
+                } else {
+                    statusHtml = `<span class="bg-pastel-error text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg> SALAH</span>`;
+                    borderClass = 'border-pastel-error';
+                }
+
+                let optionsHtml = '';
+                Object.keys(q.options).forEach(key => {
+                    const isUserChoice = !isSkipped && userAns.selectedOption === key;
+                    const isActualAnswer = q.answer === key;
+                    
+                    let optClass = "border-pastel-light bg-white text-gray-700";
+                    let badge = "";
+
+                    if (isActualAnswer) {
+                        optClass = "border-pastel-success bg-green-50 text-pastel-success font-bold";
+                        badge = `<svg class="w-5 h-5 ml-auto text-pastel-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+                    } else if (isUserChoice && !isCorrect) {
+                        optClass = "border-pastel-error bg-red-50 text-pastel-error line-through opacity-70";
+                        badge = `<svg class="w-5 h-5 ml-auto text-pastel-error" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>`;
+                    }
+
+                    optionsHtml += `
+                        <div class="p-3 rounded-lg border-2 ${optClass} text-sm flex items-center mb-2">
+                            <span class="w-6 h-6 rounded-full bg-white flex items-center justify-center text-xs border border-current mr-3 shrink-0">${key}</span>
+                            <span class="flex-1">${q.options[key]}</span>
+                            ${badge}
+                        </div>
+                    `;
+                });
+
+                const html = `
+                    <div class="bg-white rounded-2xl p-6 border-l-4 ${borderClass} shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <h4 class="font-bold text-pastel-text text-sm">SOAL ${index + 1}</h4>
+                            ${statusHtml}
+                        </div>
+                        <p class="font-bold text-gray-800 mb-4">${q.question}</p>
+                        <div class="mb-4 pl-2">
+                            ${optionsHtml}
+                        </div>
+                        <div class="bg-pastel-light rounded-xl p-4 text-sm text-pastel-text border border-pastel-butter">
+                            <span class="font-bold block mb-1">Pembahasan:</span>
+                            ${q.explanation}
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+
+        window.viewDiscussion = function() {
+            navTo('discussion');
+        };
+
+        // ==========================================
+        // 8. LEADERBOARD / RECAP (FIREBASE DB)
+        // ==========================================
+        window.fetchLeaderboard = async function() {
+            navTo('recap');
+            const tbody = document.getElementById('recap-table-body');
+            const errorMsg = document.getElementById('db-error-msg');
+            
+            errorMsg.classList.add('hidden');
+            tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-gray-500">Memuat data dari server... <div class="mt-2 text-pastel-gold animate-pulse">● ● ●</div></td></tr>`;
+
+            if (!firebaseReady || !userId) {
+                errorMsg.classList.remove('hidden');
+                errorMsg.innerHTML = "Database tidak terhubung. Hanya dapat menampilkan data contoh jika ada.";
+                tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-gray-500 italic">Tidak ada data (Database Offline)</td></tr>`;
+                return;
+            }
+
+            try {
+                // RULE 2: No complex queries. Fetch all, process in JS.
+                const colRef = getPublicCollectionPath();
+                const snapshot = await getDocs(colRef);
+                
+                const data = [];
+                snapshot.forEach(doc => {
+                    data.push({ id: doc.id, ...doc.data() });
+                });
+
+                state.leaderboardData = data;
+                updateStats(data);
+                handleSort(); // This will render the table
+            } catch (error) {
+                console.error("Error fetching leaderboard", error);
+                errorMsg.classList.remove('hidden');
+                tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-red-500">Gagal memuat data.</td></tr>`;
+            }
+        };
+
+        function updateStats(data) {
+            if (data.length === 0) {
+                document.getElementById('stat-total').innerText = "0";
+                document.getElementById('stat-avg').innerText = "-";
+                document.getElementById('stat-high').innerText = "-";
+                document.getElementById('stat-low').innerText = "-";
+                return;
+            }
+
+            document.getElementById('stat-total').innerText = data.length;
+            
+            const scores = data.map(d => d.score || 0);
+            const avg = Math.round(scores.reduce((a,b)=>a+b, 0) / scores.length);
+            const max = Math.max(...scores);
+            const min = Math.min(...scores);
+
+            document.getElementById('stat-avg').innerText = avg;
+            document.getElementById('stat-high').innerText = max;
+            document.getElementById('stat-low').innerText = min;
+        }
+
+        window.handleSearch = function() {
+            renderTable();
+        };
+
+        window.handleSort = function() {
+            const sortVal = document.getElementById('sort-select').value;
+            
+            if (sortVal === 'terbaru') {
+                state.leaderboardData.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+            } else if (sortVal === 'tertinggi') {
+                state.leaderboardData.sort((a, b) => (b.score || 0) - (a.score || 0));
+            } else if (sortVal === 'terendah') {
+                state.leaderboardData.sort((a, b) => (a.score || 0) - (b.score || 0));
+            } else if (sortVal === 'nama_az') {
+                state.leaderboardData.sort((a, b) => (a.playerName || "").localeCompare(b.playerName || ""));
+            }
+            
+            renderTable();
+        };
+
+        function renderTable() {
+            const tbody = document.getElementById('recap-table-body');
+            const searchQ = document.getElementById('search-input').value.toLowerCase();
+            
+            let filtered = state.leaderboardData;
+            if (searchQ) {
+                filtered = filtered.filter(item => (item.playerName || "").toLowerCase().includes(searchQ));
+            }
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-gray-500">Belum ada hasil yang sesuai.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = '';
+            filtered.forEach((item, index) => {
+                const date = new Date(item.timestamp || item.createdAt || Date.now());
+                const timeStr = `${date.toLocaleDateString('id-ID')} ${date.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'})}`;
+                
+                // Color code score
+                let scoreClass = 'text-pastel-gold';
+                if(item.score >= 90) scoreClass = 'text-pastel-success';
+                else if(item.score < 70) scoreClass = 'text-pastel-error';
+
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-pastel-light transition-colors';
+                tr.innerHTML = `
+                    <td class="p-4 text-center text-gray-500">${index + 1}</td>
+                    <td class="p-4 font-bold text-pastel-text">${item.playerName || 'Anonim'}</td>
+                    <td class="p-4 text-center hidden md:table-cell text-pastel-success">${item.correctCount || 0}</td>
+                    <td class="p-4 text-center hidden md:table-cell text-pastel-error">${item.wrongCount || 0}</td>
+                    <td class="p-4 text-center font-black ${scoreClass} text-lg">${item.score || 0}</td>
+                    <td class="p-4 text-gray-500 hidden md:table-cell text-xs">${timeStr}</td>
+                    <td class="p-4 text-center">
+                        <button onclick="viewDetail('${item.id}')" class="px-3 py-1 bg-white border border-pastel-bright text-pastel-text font-bold text-xs rounded-lg hover:bg-pastel-bright transition-all shadow-sm">
+                            LIHAT
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.viewLeaderboard = function() {
+            fetchLeaderboard();
+        };
+
+        // ==========================================
+        // 9. LEADERBOARD DETAIL
+        // ==========================================
+        window.viewDetail = function(docId) {
+            const data = state.leaderboardData.find(d => d.id === docId);
+            if (!data) return;
+
+            // Populate Info
+            document.getElementById('detail-id').innerText = `ID: ${data.sessionId || data.id}`;
+            document.getElementById('detail-name').innerText = data.playerName || 'Anonim';
+            
+            const date = new Date(data.timestamp || data.createdAt || Date.now());
+            document.getElementById('detail-time').innerText = `${date.toLocaleDateString('id-ID')} ${date.toLocaleTimeString('id-ID')}`;
+            
+            document.getElementById('detail-score').innerText = data.score || 0;
+            document.getElementById('detail-correct').innerText = `B: ${data.correctCount || 0}`;
+            document.getElementById('detail-wrong').innerText = `S: ${data.wrongCount || 0}`;
+
+            // Populate Answers
+            const container = document.getElementById('detail-answers-container');
+            container.innerHTML = '';
+
+            const answers = data.answers || [];
+            
+            if (answers.length === 0) {
+                 container.innerHTML = '<p class="text-gray-500 text-sm italic">Rincian jawaban tidak tersimpan dalam format lama.</p>';
+            } else {
+                quizData.forEach((q, index) => {
+                    const ans = answers[index];
+                    const isCorrect = ans && ans.isCorrect;
+                    const isSkipped = !ans || !ans.selectedOption;
+                    const userOpt = isSkipped ? '-' : ans.selectedOption;
+
+                    let bg = isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
+                    if (isSkipped) bg = 'bg-gray-50 border-gray-200';
+
+                    let icon = isCorrect ? '<span class="text-green-500 font-bold">✓</span>' : (isSkipped ? '<span class="text-gray-400 font-bold">-</span>' : '<span class="text-red-500 font-bold">✕</span>');
+
+                    container.innerHTML += `
+                        <div class="p-3 rounded-xl border ${bg} text-sm flex flex-col md:flex-row md:items-center justify-between gap-2">
+                            <div class="flex items-center gap-3">
+                                <span class="font-bold text-gray-500 w-5">#${index+1}</span>
+                                <span class="text-gray-700 flex-1 truncate max-w-[200px] md:max-w-md" title="${q.question}">${q.question.substring(0, 40)}...</span>
+                            </div>
+                            <div class="flex items-center gap-4 bg-white px-3 py-1 rounded-lg border border-gray-100 shrink-0 shadow-sm ml-8 md:ml-0">
+                                <div class="text-center">
+                                    <span class="block text-[10px] text-gray-400 uppercase">Jawaban</span>
+                                    <span class="font-bold text-gray-700">${userOpt}</span>
+                                </div>
+                                <div class="text-center">
+                                    <span class="block text-[10px] text-gray-400 uppercase">Kunci</span>
+                                    <span class="font-bold text-pastel-success">${q.answer}</span>
+                                </div>
+                                <div class="w-6 text-center text-lg ml-2">
+                                    ${icon}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            navTo('detail');
+        };
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            initFirebase();
+            document.getElementById('playerName').addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') startQuiz();
+            });
+        });
+
+    </script>
+</body>
+</html>
